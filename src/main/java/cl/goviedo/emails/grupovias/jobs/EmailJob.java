@@ -23,6 +23,12 @@ public class EmailJob implements Job {
     @Value("${email.to}")
     private String to;
 
+    @Value("${email.cc}")
+    private String listOfCCRecipients;
+
+    @Value("${email.urgencia}")
+    private String urgencia;
+
     private String subject;
 
     private String body;
@@ -32,12 +38,12 @@ public class EmailJob implements Job {
     public void execute(JobExecutionContext context) throws JobExecutionException {
         try {
 
-            GrupoViasBO bo = new GrupoViasBO();
+            GrupoViasBO bo = new GrupoViasBO(from, urgencia);
 
             subject = bo.getSubject();
             body = bo.getBody();
 
-            emailService.sendEmail(from, to, subject, body);
+            emailService.sendEmail(from, to, subject, body, listOfCCRecipients);
         } catch (Exception e) {
             throw new JobExecutionException(e);
         }

@@ -1,5 +1,7 @@
 package cl.goviedo.emails.grupovias.services;
 
+import jakarta.mail.Message;
+import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -18,9 +20,12 @@ public class GoogleJavaMailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    public void sendEmail(String from, String to, String subject, String body) throws MessagingException {
+    public void sendEmail(String from, String to, String subject, String body, String listCCRecipients) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+        message.addRecipients(Message.RecipientType.CC,
+                InternetAddress.parse(listCCRecipients));
 
         helper.setFrom(from);
         helper.setTo(to);
