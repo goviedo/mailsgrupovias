@@ -1,4 +1,4 @@
-package cl.goviedo.emails.grupovias.services;
+package cl.goviedo.emails.grupovias.services.correo;
 
 import com.mailersend.sdk.*;
 import com.mailersend.sdk.emails.Email;

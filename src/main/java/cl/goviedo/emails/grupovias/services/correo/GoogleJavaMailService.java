@@ -1,4 +1,4 @@
-package cl.goviedo.emails.grupovias.services;
+package cl.goviedo.emails.grupovias.services.correo;
 
 import jakarta.mail.Message;
 import jakarta.mail.internet.InternetAddress;
@@ -17,8 +17,13 @@ import jakarta.mail.MessagingException;
 @Service
 public class GoogleJavaMailService {
 
-    @Autowired
+
     private JavaMailSender mailSender;
+
+    @Autowired
+    public GoogleJavaMailService(JavaMailSender javaMailSender) {
+        this.mailSender =javaMailSender;
+    }
 
     public void sendEmail(String from, String to, String subject, String body, String listCCRecipients) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
