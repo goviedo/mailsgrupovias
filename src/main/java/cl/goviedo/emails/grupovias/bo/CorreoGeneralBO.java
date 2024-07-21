@@ -7,10 +7,18 @@ public class CorreoGeneralBO {
     private String urgencia;
     private String subject;
     private final String from = "goviedo.sevenit@gmail.com";
+    private boolean cuentaBancaria;
 
-    public CorreoGeneralBO(String compromiso, String urgencia) {
+    /**
+     * La cuentaBancaria indica si es necesario colocar datos bancarios o no.
+     * @param compromiso
+     * @param urgencia
+     * @param cuentaBancaria
+     */
+    public CorreoGeneralBO(String compromiso, String urgencia, boolean cuentaBancaria) {
         this.compromiso = compromiso;
         this.urgencia = urgencia;
+        this.cuentaBancaria = cuentaBancaria;
     }
 
     public String getSubject() {
@@ -19,7 +27,7 @@ public class CorreoGeneralBO {
 
     public String getBody() {
         StringBuilder s = new StringBuilder();
-        s.append("<h1>Muy buenos d&iacute;as</h1>");
+        s.append("<h1>Muy buenos d&iacute;as.</h1>");
         s.append(ENTER);
         s.append("Les recuerdo y agradezco profundamente el compromiso que han adquirido. Para recordar es lo siguiente: ");
         s.append(ulLi(compromiso));
@@ -30,6 +38,16 @@ public class CorreoGeneralBO {
         s.append(".");
         s.append(ENTER);
         s.append("Tambien tienen mi Tel&eacute;fono/Whatsapp: <b>+56963723603</b>");
+
+        if(cuentaBancaria) {
+            s.append(ENTER);
+            s.append("Para que se les haga m&aacute;s f&aacute;cil, aqu&iacute; se encuentran mis datos bancarios: ");
+            s.append("<hr/>");
+            s.append(CuentasBO.mercadoPagoHtml());
+            s.append("<hr/>");
+            s.append(CuentasBO.bciHtml());
+            s.append("<hr/>");
+        }
         s.append(ENTER);
         s.append(ENTER);
         s.append("<h2>");
@@ -41,6 +59,20 @@ public class CorreoGeneralBO {
         s.append("</li>");
         s.append("</ul>");
         s.append("</h2>");
+        s.append(footer());
+        return s.toString();
+    }
+
+    private String footer() {
+        StringBuilder s = new StringBuilder();
+
+        s.append(ENTER);
+        s.append(ENTER);
+        s.append("Sin más, agradeciendo sus tareas o gestiones,");
+        s.append(ENTER);
+        s.append("<b>Les deseo un maravilloso d&iacute;a,</b>");
+        s.append(ENTER);
+        s.append("<i>Gonzalo Oviedo Lambert.</i>");
         return s.toString();
     }
 

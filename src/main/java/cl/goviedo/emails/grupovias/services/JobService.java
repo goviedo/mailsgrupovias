@@ -59,6 +59,7 @@ public class JobService {
             String cron,
             String destinatario,
             String listaDestinatarios,
+            String cuentaBancaria,
             Class<? extends EmailCompromisoUrgenciaJob> jobClass)  throws SchedulerException {
 
         String grupo = "general";
@@ -68,15 +69,16 @@ public class JobService {
         jobDataMap.put("compromiso", compromiso);
         jobDataMap.put("destinatario", destinatario);
         jobDataMap.put("listaDestinatarios", listaDestinatarios);
+        jobDataMap.put("cuentaBancaria", cuentaBancaria); // Indica si colocar o no la cuenta bancaria (1 = SI)
 
 
         JobDetail jobDetail = JobBuilder.newJob(jobClass)
-                .withIdentity(nombreJob, grupo).withDescription("Email generales, no tienen un destinatario en especial aun")
+                .withIdentity(nombreJob, grupo).withDescription("Trabajo en especifico a correos.")
                 .usingJobData(jobDataMap)
                 .build();
 
         Trigger trigger = TriggerBuilder.newTrigger()
-                .withIdentity(nombreJob + "Trigger", grupo)
+                .withIdentity(nombreJob + "Trigger", grupo).withDescription("Lanzamiento general a correos deseados, con cuenta corriente o no")
                 .withSchedule(CronScheduleBuilder.cronSchedule(cron))
                 .build();
         scheduler.scheduleJob(jobDetail, trigger);

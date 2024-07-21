@@ -69,10 +69,11 @@ public class JobsController {
             @RequestParam("nombreJob") String nombreJob,
             @RequestParam("cron") String cron,
             @RequestParam("destinatario") String destinatario,
-            @RequestParam("cc") String listaDestinatarios) throws SchedulerException {
+            @RequestParam("cc") String listaDestinatarios,
+            @RequestParam("cuentaBancaria") String cuentaBancaria) throws SchedulerException {
         log.info("JobsController::otraUrgenciaGrupoVias");
         EmailCompromisoUrgenciaJob email = new EmailCompromisoUrgenciaJob();
-        jobService.addJobCronCompromisoUrgencia(compromiso,urgencia,nombreJob,cron,destinatario,listaDestinatarios, email.getClass());
+        jobService.addJobCronCompromisoUrgencia(compromiso,urgencia,nombreJob,cron,destinatario,listaDestinatarios,cuentaBancaria, email.getClass());
     }
 
 

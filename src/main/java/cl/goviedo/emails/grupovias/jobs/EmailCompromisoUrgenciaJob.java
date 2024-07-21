@@ -28,12 +28,14 @@ public class EmailCompromisoUrgenciaJob extends QuartzJobBean {
             String compromiso = context.getJobDetail().getJobDataMap().getString("compromiso");
             String destinatario = context.getJobDetail().getJobDataMap().getString("destinatario");
             String listaDestinatarios = context.getJobDetail().getJobDataMap().getString("listaDestinatarios");
+            boolean cuentaBancaria = Boolean.valueOf(String.valueOf(context.getJobDetail().getJobDataMap().getString("cuentaBancaria"))).booleanValue();
 
             String from = "goviedo.sevenit@gmail.com";
             String to = destinatario;
             String ccs = listaDestinatarios;
 
-            CorreoGeneralBO correo = new CorreoGeneralBO(compromiso,urgencia);
+            log.info("cuenta bancaria es: {}",cuentaBancaria);
+            CorreoGeneralBO correo = new CorreoGeneralBO(compromiso,urgencia, cuentaBancaria);
             correo.setSubject("Compromisos adquiridos y esperando respuesta. Favor responder a la brevedad posible.");
 
             emailService.sendEmail(from, to, correo.getSubject(), correo.getBody(), ccs);
