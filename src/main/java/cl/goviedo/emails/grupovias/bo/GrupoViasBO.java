@@ -41,6 +41,20 @@ public class GrupoViasBO {
         s.append("</li>");
         s.append("</ul>");
         s.append("</h2>");
+        s.append(footer());
+        return s.toString();
+    }
+
+    private String footer() {
+        StringBuilder s = new StringBuilder();
+
+        s.append(ENTER);
+        s.append(ENTER);
+        s.append("Sin más, agradeciendo sus tareas o gestiones y que sean rápidos en sus respuestas,");
+        s.append(ENTER);
+        s.append("<b>Les deseo un maravilloso d&iacute;a,</b>");
+        s.append(ENTER);
+        s.append("<i>Gonzalo Oviedo Lambert.</i>");
         return s.toString();
     }
 

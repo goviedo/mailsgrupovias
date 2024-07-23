@@ -11,6 +11,7 @@ import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
 import java.util.Properties;
+import java.util.TimeZone;
 
 @Configuration
 public class QuartzConfig {
@@ -33,11 +34,6 @@ public class QuartzConfig {
         jobDetailFactory.setDescription("Email mios enviados en un intervalo predefinidos a los irresponsables de grupo vias");
         jobDetailFactory.setDurability(true);
         return jobDetailFactory;
-        /*
-        return JobBuilder.newJob(EmailGrupoViasJob.class)
-                .withIdentity("emailJob")
-                .storeDurably()
-                .build();*/
     }
 
     @Bean
@@ -47,23 +43,12 @@ public class QuartzConfig {
         triggerFactory.setCronExpression(intervalo); // Run every 5 minutes
         return triggerFactory;
     }
-/*
-    @Bean
-    public Trigger emailJobTrigger() {
-        SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder.simpleSchedule()
-                .withIntervalInSeconds(intervalo) // every 2 days
-                .repeatForever();
-
-        return TriggerBuilder.newTrigger()
-                .forJob(emailJobDetail())
-                .withIdentity("emailTrigger")
-                .withSchedule(scheduleBuilder)
-                .build();
-    }*/
 
     @Bean
     public SchedulerFactoryBean schedulerFactoryBean() {
         SchedulerFactoryBean factory = new SchedulerFactoryBean();
+        factory.setSchedulerContextAsMap(java.util.Collections.singletonMap(
+                "org.quartz.scheduler.timezone", TimeZone.getTimeZone("America/Santiago")));
         factory.setJobFactory(jobFactory);
 
         // TIMEZONE

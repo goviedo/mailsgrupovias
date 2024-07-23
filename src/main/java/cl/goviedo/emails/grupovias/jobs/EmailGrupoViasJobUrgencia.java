@@ -26,24 +26,24 @@ public class EmailGrupoViasJobUrgencia extends QuartzJobBean {
         try {
 
             String from = "goviedo.sevenit@gmail.com";
-            String to = "goviedo@sb.cl";
-            String ccs = "goviedo.sevenit@gmail.com";
 
             String urgencia = context.getJobDetail().getJobDataMap().getString("urgencia");
+            String to = context.getJobDetail().getJobDataMap().getString("to");
+            String ccs = context.getJobDetail().getJobDataMap().getString("cc");
 
-            GrupoViasBO bo = new GrupoViasBO(from,urgencia==null || urgencia.isEmpty()?"No llego la urgencia":urgencia);
+            GrupoViasBO bo = new GrupoViasBO(from,urgencia==null || urgencia.isEmpty()?"Capacidad de respuesta muy lenta!. Favor ser mas proactivos!":urgencia);
 
             String subject = bo.getSubject();
             String body = bo.getBody();
 
             emailService.sendEmail(from, to, subject, body, ccs);
 
-            log.info("Job {} completed at {}", context.getJobDetail().getKey().getName(), new Date());
+            log.info("==GRUPO VIAS== Job {}  enviado el {}", context.getJobDetail().getKey().getName(), new Date());
         } catch (MessagingException e) {
-            log.error("EmailGrupoViasJob: Error al enviar el EMAIL {}",e.getMessage(),e);
+            log.error("EmailGrupoViasJobUrgencia: Error al enviar el EMAIL {}",e.getMessage(),e);
             JobExecutionException jobException = new JobExecutionException(e);
             jobException.setRefireImmediately(true); // Decide whether to refire
-            throw  new JobExecutionException("EmailGrupoViasJob con problemas: ",e);
+            throw  new JobExecutionException("EmailGrupoViasJobUrgencia con problemas: ",e);
         }
     }
 }

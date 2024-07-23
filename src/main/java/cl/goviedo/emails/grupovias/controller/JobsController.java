@@ -7,10 +7,9 @@ import cl.goviedo.emails.grupovias.services.JobService;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -44,10 +43,10 @@ public class JobsController {
      * @throws SchedulerException
      */
     @GetMapping(value = "/urgencia")
-    public void otraUrgenciaGrupoVias(@RequestParam("urgencia") String urgencia, @RequestParam("nombreUnico") String nombreUnico, @RequestParam("cron") String cron) throws SchedulerException {
+    public void otraUrgenciaGrupoVias(@RequestParam("urgencia") String urgencia, @RequestParam("to") String to, @RequestParam("cc") String cc, @RequestParam("nombreUnico") String nombreUnico, @RequestParam("cron") String cron) throws SchedulerException {
         log.info("JobsController::otraUrgenciaGrupoVias");
         EmailGrupoViasJobUrgencia email = new EmailGrupoViasJobUrgencia();
-        jobService.addJobCron(nombreUnico, "grupovias", email.getClass(), urgencia,cron,"Para enviar diferentes tipos de urgencia");
+        jobService.addJobCronGrupoVias(urgencia, to, cc, nombreUnico, "grupovias", email.getClass(), cron,"Para enviar diferentes tipos de urgencia");
     }
 
 
@@ -74,6 +73,22 @@ public class JobsController {
         log.info("JobsController::otraUrgenciaGrupoVias");
         EmailCompromisoUrgenciaJob email = new EmailCompromisoUrgenciaJob();
         jobService.addJobCronCompromisoUrgencia(compromiso,urgencia,nombreJob,cron,destinatario,listaDestinatarios,cuentaBancaria, email.getClass());
+    }
+
+    /**
+     * Elimina una tarea dado su nombre y grupo.
+     * @param nombre
+     * @param grupo
+     * @return
+     */
+    @DeleteMapping("/{nombre}/{grupo}")
+    public ResponseEntity<String> removeJob(@PathVariable String nombre, @PathVariable String grupo) {
+        try {
+            jobService.eliminarTareaNombreGrupo(nombre, grupo);
+            return ResponseEntity.ok("Job removed successfully");
+        } catch (SchedulerException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No pude eliminar la tarea: " + e.getMessage());
+        }
     }
 
 
