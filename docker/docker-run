@@ -1,0 +1,1 @@
+docker run --name gvm -p 15000:8080 -d gvmail
