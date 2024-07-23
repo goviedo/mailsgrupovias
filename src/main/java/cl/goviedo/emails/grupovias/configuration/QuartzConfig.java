@@ -40,7 +40,8 @@ public class QuartzConfig {
     public CronTriggerFactoryBean trigger(JobDetail job) {
         CronTriggerFactoryBean triggerFactory = new CronTriggerFactoryBean();
         triggerFactory.setJobDetail(job);
-        triggerFactory.setCronExpression(intervalo); // Run every 5 minutes
+        triggerFactory.setCronExpression(intervalo);
+        triggerFactory.setTimeZone(TimeZone.getTimeZone("America/Santiago"));// Run every 5 minutes
         return triggerFactory;
     }
 
